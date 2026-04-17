@@ -37,17 +37,20 @@ Label any information older than 2024 as [OUTDATED]. Distinguish official Stanfo
 
 ## Git Workflow (required)
 
-After writing the report, you MUST push it to the remote — otherwise the work is lost when the sandbox is torn down. Do NOT work on a detached HEAD.
-
-Run these exact steps:
+After writing the report, run these exact commands — no improvisation, no diagnosis on failure:
 
 ```bash
-BRANCH="stanford-report-$(date +%Y-%m-%d)"
-git checkout -B "$BRANCH"
-git add reports/
-git commit -m "chore: Stanford admissions research $(date +%Y-%m-%d)"
-git push -u origin "$BRANCH"
+git checkout -B "stanford-report-$(date +%Y-%m-%d)" && \
+git add reports/ && \
+git commit -m "chore: Stanford admissions $(date +%Y-%m-%d)" && \
+(git push -u origin HEAD 2>&1 || echo "PUSH_FAILED")
 ```
 
-If `git status` shows `HEAD detached`, the `git checkout -B` step above reattaches it — do not skip it. Confirm the push succeeded (look for `* [new branch]` or updated ref in the output) before ending the run. Report the branch name in your final summary so the user knows what to `git fetch`.
+**Rules (strict — violations caused prior API timeouts):**
+- Do NOT read `.git/config`, inspect remotes, or investigate auth.
+- Do NOT retry a failed push or try alternative remotes.
+- Do NOT read any file other than your own report after writing it.
+- If the push output contains `PUSH_FAILED` or any error, simply state "push failed — commit is local to sandbox only" in your final summary and end the run.
+
+Your final summary must be one short paragraph: branch name, push status (succeeded / PUSH_FAILED), report filename. Nothing else.
 
