@@ -35,3 +35,19 @@ Write a single structured report with these sections (keep each section tight):
 
 Label any information older than 2024 as [OUTDATED]. Distinguish official Stanford communications from third-party opinions.
 
+## Git Workflow (required)
+
+After writing the report, you MUST push it to the remote — otherwise the work is lost when the sandbox is torn down. Do NOT work on a detached HEAD.
+
+Run these exact steps:
+
+```bash
+BRANCH="stanford-report-$(date +%Y-%m-%d)"
+git checkout -B "$BRANCH"
+git add reports/
+git commit -m "chore: Stanford admissions research $(date +%Y-%m-%d)"
+git push -u origin "$BRANCH"
+```
+
+If `git status` shows `HEAD detached`, the `git checkout -B` step above reattaches it — do not skip it. Confirm the push succeeded (look for `* [new branch]` or updated ref in the output) before ending the run. Report the branch name in your final summary so the user knows what to `git fetch`.
+
